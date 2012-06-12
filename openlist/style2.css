@@ -1,0 +1,30 @@
+a {
+	color: #369;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+h1  {
+	color:#666;
+  font-size: 1.1em;
+  margin-top: 0px;
+  margin-bottom: 5px;
+}
+
+h2  {
+  font-size: 1.05em;
+}
+
+#illinks {
+display: none;
+}
+
+#footer {
+display: none;
+}
+
+
+
