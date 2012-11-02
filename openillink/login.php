@@ -50,7 +50,77 @@ setcookie('illinkid[bib]', '', (time() - 31536000));
 setcookie('illinkid[aut]', '', (time() - 31536000));
 setcookie('illinkid[log]', '', (time() - 31536000));
 }
+
+// *********************************
+// *********************************
+// shibboleth authentication
+// *********************************
+// *********************************
+if (($shibboleth == 1) && ($_GET['action'] == 'shibboleth'))
+{
+$email = 'nobody@nowhere.ch';
+// $email = strtolower($_SERVER['mail']);
+$email = strtolower($_SERVER['Shib-InetOrgPerson-mail']);
+if (strlen($email)<6)
+{
+$email = 'nobody@nowhere.ch';
+$mes='Votre login Shibboleth ne correspond pas avec un compte sur OpenILLink, veuillez contacter l\'administrateur du site : ' . $configemail;
 }
+else
+{
+require ("includes/connect.php");
+// check if the user id and password combination exist in database
+$req = "SELECT * FROM users WHERE email = '$email'";
+$result = mysql_query($req,$link);
+$nb = mysql_num_rows($result);
+if ($nb == 1)
+{
+// the user id and password match
+$logok=$logok+1;
+for ($i=0 ; $i<$nb ; $i++)
+{
+$enreg = mysql_fetch_array($result);
+$nom = $enreg['name'];
+$login = $enreg['login'];
+$status = $enreg['status'];
+$library = $enreg['library'];
+$admin = $enreg['admin'];
+$admin = md5 ($admin . $secure_string_cookie);
+setcookie('illinkid[nom]', $nom, (time() + 36000));
+setcookie('illinkid[bib]', $library, (time() + 36000));
+setcookie('illinkid[aut]', $admin, (time() + 36000));
+setcookie('illinkid[log]', $login, (time() + 36000));
+if ($monaut=="sadmin")
+header("$rediradmin");
+if ($monaut=="admin")
+header("$rediradmin");
+if ($monaut=="user")
+header("$rediruser");
+if ($monaut=="guest")
+header("$redirguest");
+}
+}
+else
+{
+// the user id and password don't match, so guest with login = email
+$cookie_guest = md5 ("9" . $secure_string_cookie);
+$logok=$logok+1;
+setcookie('illinkid[nom]', $email, (time() + 36000));
+setcookie('illinkid[bib]', 'guest', (time() + 36000));
+setcookie('illinkid[aut]', $cookie_guest, (time() + 36000));
+setcookie('illinkid[log]', $email, (time() + 36000));
+header("$redirguest");
+}
+}
+}
+}
+// *********************************
+// *********************************
+// login/password authentication
+// *********************************
+// *********************************
+
+
 if ((isset($_POST['log']))&&(isset($_POST['pwd'])))
 {
 $logok=0;
@@ -113,9 +183,11 @@ require ("includes/header.php");
 echo "<ul>\n";
 if ($mes)
 echo "<br /><b><font color=\"red\">".$mes."</font></b><br />\n";
+if ($shibboleth == 1)
+echo "<a href=\"". $shibbolethurl . "\"><img src=\"img/shibboleth.png\" alt=\"Shibboleth authentication\" style=\"float:right;\"/></a>";
 echo "<form name=\"loginform\" id=\"loginform\" action=\"login.php\" method=\"post\">\n";
-echo "<p><label>Username:<br /><input type=\"text\" name=\"log\" id=\"log\" value=\"" . $log . "\" size=\"20\" tabindex=\"1\" /></label></p>\n";
-echo "<p><label>Password:<br /> <input type=\"password\" name=\"pwd\" id=\"pwd\" value=\"\" size=\"20\" tabindex=\"2\" /></label></p>\n";
+echo "<label>Username:<br /><input type=\"text\" name=\"log\" id=\"log\" value=\"" . $log . "\" size=\"20\" tabindex=\"1\" /></label></p>\n";
+echo "<label>Password:<br /> <input type=\"password\" name=\"pwd\" id=\"pwd\" value=\"\" size=\"20\" tabindex=\"2\" /></label></p>\n";
 // echo "<p>\n";
 // echo "  <label><input name=\"rememberme\" type=\"checkbox\" id=\"rememberme\" value=\"forever\" tabindex=\"3\" /> \n";
 // echo "  Garder en mémoire</label></p>\n";
@@ -125,6 +197,7 @@ echo "<input type=\"hidden\" name=\"redirect_to\" value=\"/\" />\n";
 echo "</p>\n";
 echo "<br />\n";
 echo "</form>\n";
+
 echo "</ul>\n";
 echo "\n";
 if ($_GET['action'] == 'logout')

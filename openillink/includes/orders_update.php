@@ -123,7 +123,7 @@ if (($servautre!='') && ($servautre!=$service))
 $service=$servautre;
 $cgra=addslashes($_POST['cgra']);
 $cgrb=addslashes($_POST['cgrb']);
-$mail=$_POST['mail'];
+$mail=trim($_POST['mail']);
 $tel=addslashes($_POST['tel']);
 $adresse=addslashes($_POST['adresse']);
 $postal=addslashes($_POST['postal']);
