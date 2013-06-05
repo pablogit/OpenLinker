@@ -26,7 +26,7 @@
 // essential parameters
 
 // MySQL access codes
-$configmysqldb = "openillink";
+$configmysqldb = "openlinker";
 $configmysqlhost = "localhost";
 $configmysqllogin = "root";
 $configmysqlpwd = "panamara";
@@ -105,7 +105,7 @@ $lookupuid[4]["code"] = "wosid";
 
 
 // OpenURL parameters
-$openurlsid = "OpenILLink:DemoDB";
+$openurlsid = "OpenLinker:DemoDB";
 
 // Autodetect language from browser settings (0 inactive, 1 active)
 $langautodetect = 0;
