@@ -37,7 +37,7 @@ echo "<div class='box'><div class='box-content'>\n";
 // Liens vers le texte intégral si accès OK
 
 echo "<a href='http://www.crossref.org/openurl\n";
-echo $urlquery . "&pid=udm:udm124\n";
+echo $urlquery . "&pid=brokerid:brokerpass\n";
 echo "' target='_blank'><b><font color='green'>Accès au texte intégral</font></b></a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;\n";
 
 // Liens vers la commande OpenILLink
