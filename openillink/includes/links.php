@@ -177,7 +177,7 @@ while ($rowlinks = mysql_fetch_array($resultlinks))
 {
 $linktitle = $rowlinks["title"];
 $linkurl = $rowlinks["url"];
-$linkurlreplace = str_replace("XISBNX",urlencode ($stitleclean),$linkurl);
+$linkurlreplace = str_replace("XISBNX",urlencode ($enreg['isbn']),$linkurl);
 $listlinks.="<li><a href=\"" . $linkurlreplace . "\" target=\"_blank\">" . $linktitle . "</a></li>\n";
 }
 echo "<ul>\n";
